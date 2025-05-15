@@ -1,4 +1,5 @@
-﻿using Integracion_Gemini_y_Apis.Interface;
+﻿using System.Text;
+using Integracion_Gemini_y_Apis.Interface;
 using Integracion_Gemini_y_Apis.Models;
 using Microsoft.Extensions.FileProviders.Composite;
 using Newtonsoft.Json;
@@ -9,7 +10,7 @@ namespace Integracion_Gemini_y_Apis.Repositories
     public class GeminiRepositorie : IChatbotServive
     {
         private HttpClient _httpClient;
-        private string geminiApiKey = "AIzaSyBZFA1dpLS1DejGK4otzvJCCmf1dgSn6SI"
+        private string geminiApiKey = "AIzaSyBZFA1dpLS1DejGK4otzvJCCmf1dgSn6SI";
 
         public GeminiRepositorie()
         {
@@ -21,7 +22,7 @@ namespace Integracion_Gemini_y_Apis.Repositories
             string url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + geminiApiKey;
             GeminiRequest request = new GeminiRequest
             {
-                contents = new List<GeminiRepositorie>
+                contents = new List<GeminiContent>
                 {
                     new GeminiContent
                     {
@@ -37,7 +38,7 @@ namespace Integracion_Gemini_y_Apis.Repositories
             };
 
             string requestJson = JsonConvert.SerializeObject(request);
-            var content = new StringContent(requestJson, encoding.UTF8, "application/json");
+            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(url,content);
             var answer =await response.Content.ReadAsStringAsync();
             return answer;

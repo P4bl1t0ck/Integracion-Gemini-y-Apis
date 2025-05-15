@@ -16,8 +16,10 @@ namespace Integracion_Gemini_y_Apis.Controllers
 
         public async Task<IActionResult> Index()
         {
-            GeminiRepositorie repo = GeminiRepositorie();
+            GeminiRepositorie repo = new GeminiRepositorie();
             string response  = await repo.GetChatBotResponse("Dame un resumen de 100 palbras del titanic");
+            ViewBag.chatbotResponse = response;
+
             return View();
         }
 
