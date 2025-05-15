@@ -3,6 +3,7 @@ using Integracion_Gemini_y_Apis.Models;
 using Microsoft.Extensions.FileProviders.Composite;
 using Newtonsoft.Json;
 
+
 namespace Integracion_Gemini_y_Apis.Repositories
 {
     public class GeminiRepositorie : IChatbotServive
@@ -15,7 +16,7 @@ namespace Integracion_Gemini_y_Apis.Repositories
             _httpClient = new HttpClient();
            
         }
-        public Task<string> GetChatBotResponse(string prompt)
+        public async Task<string> GetChatBotResponse(string prompt)
         {
             string url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + geminiApiKey;
             GeminiRequest request = new GeminiRequest
@@ -37,8 +38,11 @@ namespace Integracion_Gemini_y_Apis.Repositories
 
             string requestJson = JsonConvert.SerializeObject(request);
             var content = new StringContent(requestJson, encoding.UTF8, "application/json");
-            var response = _httpClient.PostAsync(url,content);
-        }
+            var response = await _httpClient.PostAsync(url,content);
+            var answer =await response.Content.ReadAsStringAsync();
+            return answer;
+        }   
+
         public Task<bool> SaveResponse(string chatbotprompt, string response)
         {
             throw new NotImplementedException();

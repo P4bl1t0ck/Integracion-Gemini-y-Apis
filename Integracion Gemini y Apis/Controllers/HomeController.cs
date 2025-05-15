@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Integracion_Gemini_y_Apis.Models;
+using Integracion_Gemini_y_Apis.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Integracion_Gemini_y_Apis.Controllers
@@ -13,8 +14,10 @@ namespace Integracion_Gemini_y_Apis.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            GeminiRepositorie repo = GeminiRepositorie();
+            string response  = await repo.GetChatBotResponse("Dame un resumen de 100 palbras del titanic");
             return View();
         }
 
