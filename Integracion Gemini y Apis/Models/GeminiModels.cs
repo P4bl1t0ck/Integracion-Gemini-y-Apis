@@ -4,7 +4,7 @@
     {
         public class  GeminiRequest 
         {
-            public List<Content> contents { get; set; }
+            public List<GeminiContent> contents { get; set; }
         }
         public class GeminiContent
         {
