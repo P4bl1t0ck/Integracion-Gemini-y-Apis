@@ -13,44 +13,30 @@ namespace Integracion_Gemini_y_Apis.Repositories
         //Para ingresar el token , se debe de crear una variable temporal en el cmd.
         //Le pasare al profesor la Api de Hugging Face para que la pruebe. Y  pueda crearla para que funcione el programa
         //Git no me dejaba el enviar los cambios
-        
-
-        string token = Environment.GetEnvironmentVariable("HUGGINGFACE_TOKEN");
         //Esta funcion la revise y consigue la varible de entorno de la computadora, la cual yo opte por hacerla 
         //en el cmd. Para que no se vea el token en el codigo. la pasare con el tiempo al profesor. (Estuve 1h20 para reparar este error. )
-
+        //Console.WriteLine("Token de Hugging Face: " + token);
         public HuggingRepositorie()
         {
             _httpClient = new HttpClient();
-            //
-
-        }
-
-        public async Task<string> GetChatBotResponse(string prompt)
-        {
-            if(string.IsNullOrEmpty(token))//In case it is null or empty or it doesn´t exist.
+            string token = Environment.GetEnvironmentVariable("HUGGINGFACE_TOKEN");
+            if (string.IsNullOrEmpty(token))//In case it is null or empty or it doesn´t exist.
             {
                 throw new Exception("Token de Hugging Face no encontrado. Asegúrate de haberlo configurado correctamente.");
             }
+
+        }
+        
+        public async Task<string> GetChatBotResponse(string prompt)
+        {
             //Veamos si esto funciona le hare una prueba si no me da error.
-            string url_huggings = " https://api-inference.huggingface.co/models/gpt2" + token;
+            string url_huggings = " https://api-inference.huggingface.co/models/gpt2";
             //Esta es la url de la api de Hugging Face, la cual me da el modelo de gpt2.
-            HuggingRequest request = new HuggingRequest
+            HuggingPart huggingPart = new HuggingPart
             {
-                contents = new List<HuggingContent>
-                {
-                    new HuggingContent
-                    {
-                        parts = new List<HuggingPart>
-                        {
-                            new HuggingPart
-                            {
-                                text = prompt
-                            }
-                        }
-                    }
-                }
+                text = prompt
             };
+
             //Llamamos a las listas para que tengan forma de json.
             string requestJson = JsonConvert.SerializeObject(request);
             var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
