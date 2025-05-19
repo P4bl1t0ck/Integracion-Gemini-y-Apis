@@ -1,5 +1,6 @@
 ﻿using Integracion_Gemini_y_Apis.Interface;
 using Integracion_Gemini_y_Apis.Models;
+using Newtonsoft.Json;
 
 namespace Integracion_Gemini_y_Apis.Repositories
 {
@@ -11,7 +12,7 @@ namespace Integracion_Gemini_y_Apis.Repositories
         //Para ingresar el token , se debe de crear una variable temporal en el cmd.
         //Le pasare al profesor la Api de Hugging Face para que la pruebe. Y  pueda crearla para que funcione el programa
         //Git no me dejaba el enviar los cambios
-        IFileHttpResult()
+        
 
         string token = Environment.GetEnvironmentVariable("HUGGINGFACE_TOKEN");
         //Esta funcion la revise y consigue la varible de entorno de la computadora, la cual yo opte por hacerla 
@@ -24,7 +25,7 @@ namespace Integracion_Gemini_y_Apis.Repositories
 
         }
 
-        public Task<string> GetChatBotResponse(string prompt)
+        public async Task<string> GetChatBotResponse(string prompt)
         {
             if(string.IsNullOrEmpty(token))//In case it is null or empty or it doesn´t exist.
             {
@@ -50,12 +51,21 @@ namespace Integracion_Gemini_y_Apis.Repositories
                 }
             };
             //Llamamos a las listas para que tengan forma de json.
+            string requestJson = JsonConvert.SerializeObject(request);
+            var content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
+            //Le pasamos el json a la variable content.
+            var response =await _httpClient.PostAsync(url_huggings, content);
+            //Le pasamos la respuesta a la variable response.
+            //Y la hacemos asincornica para que no se cuelge el programa
+            var answer =await response.Content.ReadAsStringAsync();
+            return answer;
 
             throw new NotImplementedException();
         }
 
         public Task<bool> SaveResponse(string chatbotprompt, string response)
         {
+            //Este metodo me debo de encargar para el contexto de base de datos.
             throw new NotImplementedException();
         }
     }

@@ -13,10 +13,11 @@ namespace Integracion_Gemini_y_Apis.Controllers
         {
             _logger = logger;
         }
+        
 
         public async Task<IActionResult> Index()
         {
-            GeminiRepositorie repo = new GeminiRepositorie();
+            HuggingRepositorie repo = new HuggingRepositorie();
             string response  = await repo.GetChatBotResponse("Dame un resumen de 100 palbras del titanic");
             ViewBag.chatbotResponse = response;
 
