@@ -1,4 +1,5 @@
 ﻿using Integracion_Gemini_y_Apis.Interface;
+using Integracion_Gemini_y_Apis.Models;
 
 namespace Integracion_Gemini_y_Apis.Repositories
 {
@@ -10,6 +11,7 @@ namespace Integracion_Gemini_y_Apis.Repositories
         //Para ingresar el token , se debe de crear una variable temporal en el cmd.
         //Le pasare al profesor la Api de Hugging Face para que la pruebe. Y  pueda crearla para que funcione el programa
         //Git no me dejaba el enviar los cambios
+        IFileHttpResult()
 
         string token = Environment.GetEnvironmentVariable("HUGGINGFACE_TOKEN");
         //Esta funcion la revise y consigue la varible de entorno de la computadora, la cual yo opte por hacerla 
@@ -24,8 +26,31 @@ namespace Integracion_Gemini_y_Apis.Repositories
 
         public Task<string> GetChatBotResponse(string prompt)
         {
+            if(string.IsNullOrEmpty(token))//In case it is null or empty or it doesn´t exist.
+            {
+                throw new Exception("Token de Hugging Face no encontrado. Asegúrate de haberlo configurado correctamente.");
+            }
             //Veamos si esto funciona le hare una prueba si no me da error.
-            string fuente = " https://huggingface.co/settings/tokens" + token;
+            string url_huggings = " https://api-inference.huggingface.co/models/gpt2" + token;
+            //Esta es la url de la api de Hugging Face, la cual me da el modelo de gpt2.
+            HuggingRequest request = new HuggingRequest
+            {
+                contents = new List<HuggingContent>
+                {
+                    new HuggingContent
+                    {
+                        parts = new List<HuggingPart>
+                        {
+                            new HuggingPart
+                            {
+                                text = prompt
+                            }
+                        }
+                    }
+                }
+            };
+            //Llamamos a las listas para que tengan forma de json.
+
             throw new NotImplementedException();
         }
 
