@@ -1,4 +1,5 @@
-﻿using Integracion_Gemini_y_Apis.Interface;
+﻿using System.Text;
+using Integracion_Gemini_y_Apis.Interface;
 using Integracion_Gemini_y_Apis.Models;
 using Newtonsoft.Json;
 
@@ -52,7 +53,7 @@ namespace Integracion_Gemini_y_Apis.Repositories
             };
             //Llamamos a las listas para que tengan forma de json.
             string requestJson = JsonConvert.SerializeObject(request);
-            var content = new StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
+            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             //Le pasamos el json a la variable content.
             var response =await _httpClient.PostAsync(url_huggings, content);
             //Le pasamos la respuesta a la variable response.
