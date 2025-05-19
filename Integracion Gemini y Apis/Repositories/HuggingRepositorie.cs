@@ -12,9 +12,20 @@ namespace Integracion_Gemini_y_Apis.Repositories
         //Git no me dejaba el enviar los cambios
 
         string token = Environment.GetEnvironmentVariable("HUGGINGFACE_TOKEN");
-        
+        //Esta funcion la revise y consigue la varible de entorno de la computadora, la cual yo opte por hacerla 
+        //en el cmd. Para que no se vea el token en el codigo. la pasare con el tiempo al profesor. (Estuve 1h20 para reparar este error. )
+
+        public HuggingRepositorie()
+        {
+            _httpClient = new HttpClient();
+            //
+
+        }
+
         public Task<string> GetChatBotResponse(string prompt)
         {
+            //Veamos si esto funciona le hare una prueba si no me da error.
+            string fuente = " https://huggingface.co/settings/tokens" + token;
             throw new NotImplementedException();
         }
 
