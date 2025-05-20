@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 using Integracion_Gemini_y_Apis.Interface;
 using Integracion_Gemini_y_Apis.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Integracion_Gemini_y_Apis.Repositories
 {
@@ -24,30 +26,51 @@ namespace Integracion_Gemini_y_Apis.Repositories
             {
                 throw new Exception("Token de Hugging Face no encontrado. Asegúrate de haberlo configurado correctamente.");
             }
-
-        }
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         
+        }
+
         public async Task<string> GetChatBotResponse(string prompt)
         {
-            //Veamos si esto funciona le hare una prueba si no me da error.
-            string url_huggings = " https://api-inference.huggingface.co/models/gpt2";
+                //Veamos si esto funciona le hare una prueba si no me da error.
+                string url_huggings = "https://api-inference.huggingface.co/models/gpt2";
             //Esta es la url de la api de Hugging Face, la cual me da el modelo de gpt2.
-            HuggingPart huggingPart = new HuggingPart
+            //El Json que debe de funfionar
+
+
+
+            HuggingRequest request = new HuggingRequest
             {
-                text = prompt
+                inputs = prompt,
+                parameters = new Parameters
+                {
+                    MaxNewTokens = 50,
+                    Temperature = 0.7
+                }
             };
+                string requestJson = JsonConvert.SerializeObject(request);
+                Console.WriteLine("Json enviado a Huggin Face: \n" + requestJson);
+                var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+                //Le pasamos el json a la variable content.
 
-            //Llamamos a las listas para que tengan forma de json.
-            string requestJson = JsonConvert.SerializeObject(huggingPart);
-            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-            //Le pasamos el json a la variable content.
-            var response =await _httpClient.PostAsync(url_huggings, content);
-            //Le pasamos la respuesta a la variable response.
-            //Y la hacemos asincornica para que no se cuelge el programa
-            var answer =await response.Content.ReadAsStringAsync();
-            return answer;
+                var response = await _httpClient.PostAsync(url_huggings, content);
+                //Le pasamos la respuesta a la variable response.
+                //Y la hacemos asincornica para que no se cuelge el programa
 
-            throw new NotImplementedException();
+                var answer = await response.Content.ReadAsStringAsync();
+
+            //La respuesta de el gpt2, lan recibimos dentro de la variable answer y dentro de
+            //la variable jsonArray, la cual es un array de la clase HugginResponse.
+            //Accedfe a la respuesta generada por el modelo.
+            if (!answer.TrimStart().StartsWith("["))
+            {
+                Console.WriteLine("Respuesta cruda de la API:");
+                Console.WriteLine(answer);
+                throw new Exception("La respuesta de la API no tiene formato JSON válido.");
+            }
+            
+            var jsonArray = JsonConvert.DeserializeObject<List<HugginResponse>>(answer);
+            return jsonArray[0].Generatedtext;
         }
 
         public Task<bool> SaveResponse(string chatbotprompt, string response)
