@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 
 namespace Integracion_Gemini_y_Apis.Repositories
 {
-    public class OpeniaRepositorie : IChatbotServive
+    public class HuggingRepositorie : IChatbotServive
     {
         private HttpClient _httpClient;
-        public OpeniaRepositorie()
+        public HuggingRepositorie()
         {
             _httpClient = new HttpClient();
             string token = Environment.GetEnvironmentVariable("OPENIA_TOKEN");//OPENIA_TOKEN
@@ -22,15 +22,12 @@ namespace Integracion_Gemini_y_Apis.Repositories
         }
         public async Task<string> GetChatBotResponse(string prompt)
         {
-            string url_openia = "https://api.openai.com/v1/chat/completions";
+            string url_openia = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1";
             //Esta es la url de la api de OpenIA, la cual me da el modelo de gpt3.5 turbo.
-            var request = new OpenAIRequest
+            var request = new 
             {
-                Messages = new List<Message>
-                {
-                    new Message { Role = "system", Content = "Eres un asistente útil." },
-                     new Message { Role = "user", Content = prompt }
-                }
+                inputs = prompt,
+                parameters = new {max_new_tokens = 100 }
             };
             //Nuestro fomrato de C# que tomaran forma de Json.
             string json = JsonConvert.SerializeObject(request);
@@ -41,8 +38,12 @@ namespace Integracion_Gemini_y_Apis.Repositories
             //Es una respuesta asincronica.este se encarga de hacer la peticion a la api.
             var answer = await response.Content.ReadAsStringAsync();
             //Este toma la respuesta de la api y la lee de la forma asincronica.
-            if (!response.IsSuccessStatusCode) 
-            { 
+            if (!response.IsSuccessStatusCode)
+            {
+                if ((int)response.StatusCode == 429)
+                {
+                    throw new Exception("Has superado el límite de uso de la API (cuota excedida).");
+                }
                 throw new Exception($"Error de OpenAI: {answer}");
             }
             var aiResponse = JsonConvert.DeserializeObject<OpenAIResponse>(answer);
