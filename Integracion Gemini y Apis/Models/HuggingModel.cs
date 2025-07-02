@@ -7,6 +7,6 @@ namespace Integracion_Gemini_y_Apis.Models
     {
         [JsonProperty("generated_text")]
         public string GeneratedText { get; set; }
-
+        
     }
 }
