@@ -9,7 +9,7 @@ namespace Integracion_Gemini_y_Apis.Repositories
     public class HuggingRepositorie : IChatbotServive
     {
         private  HttpClient _httpClient;
-        private string token = "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";
+        private string token = "hf_Oculto_Github_No_Me_Deja";
         public HuggingRepositorie()
         {
             _httpClient = new HttpClient();
