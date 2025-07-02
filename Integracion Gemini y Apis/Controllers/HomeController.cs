@@ -17,8 +17,8 @@ namespace Integracion_Gemini_y_Apis.Controllers
 
         public async Task<IActionResult> Index()
         {
-            HuggingRepositorie repo = new HuggingRepositorie();
-            string response  = await repo.GetChatBotResponse("Dame un resumen de 100 palbras del titanic");
+            OpeniaRepositorie repo = new OpeniaRepositorie();
+            string response  = await repo.GetChatBotResponse("Hola, como estas ?");
             ViewBag.chatbotResponse = response;
 
             return View();
