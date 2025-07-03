@@ -17,9 +17,11 @@ namespace Integracion_Gemini_y_Apis.Controllers
 
         public async Task<IActionResult> Index()
         {
-            OpeniaRepositorie repo = new OpeniaRepositorie();
-            string response  = await repo.GetChatBotResponse("Hola, como estas ?");
+            //OpenAIRepositorie repo = new OpenAIRepositorie();
+            HuggingRepositorie repo = new HuggingRepositorie();
+            string response = await repo.GetChatBotResponse("Translate inglish to french: hi my name is john");
             ViewBag.chatbotResponse = response;
+
 
             return View();
         }
