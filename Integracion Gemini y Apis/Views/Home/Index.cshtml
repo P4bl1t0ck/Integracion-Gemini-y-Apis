@@ -2,10 +2,50 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Consumo de Gemini por medio de APis Vamos a ver si funciona</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <br><br>
-    <p>@ViewBag.chatbotResponse</p>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Consumo de Gemini por medio de APIs</h1>
 
-</div>
+    <!-- Pestañas de navegacion entre About y Principal, sobre la pagina main. -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="chat-tab" data-bs-toggle="tab" data-bs-target="#chat" type="button" role="tab">Chatbot</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab">About Me</button>
+        </li>
+    </ul>
+
+    <!-- Pagina Principal -->
+    <div class="tab-content mt-3" id="myTabContent">
+        <!-- Chatbot Pestaña -->
+        <div class="tab-pane fade show active" id="chat" role="tabpanel">
+            <div class="text-center">
+                <!--Estilo de lienas alrededor de la respuesta.-->
+                <div style="border: 2px solid #007bff; padding: 20px; border-radius: 10px; background-color: #f8f9fa;">
+                    <p style {
+                    <p>Respuesta del chatbot: @ViewBag.chatbotResponse</p>
+                    }
+                    <!--Boton de guardado de respuestas de Chatbot.-->
+                    <div style="margin-top: 20px;">
+                        <form asp-controller="Home" asp-action="GuardarRespuesta" method="post" style="display:inline-block;">
+                            <input type="hidden" name="frase" value="@ViewBag.chatbotResponse" />
+                            <button type="submit" class="btn btn-success">💾 Guardar respuesta</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- About Me Pestaña-->
+        <div class="tab-pane fade" id="about" role="tabpanel">
+            <div class="mt-4">
+                <h3>Sobre mí</h3>
+                <p><strong>Nombre:</strong> Pablo Montalvo</p>
+                <p><strong>Correo:</strong> pablo.montalvo.marroquin@udla.edu.ec</p>
+                <p><strong>Descripción:</strong> https://github.com/P4bl1t0ck</p>
+                <p>---------------------------------------------------------------------------------------------</p>
+                <p><strong>Nombre:</strong> Tu nombre aquí</p>
+                <p><strong>Correo:</strong> tuemail@ejemplo.com</p>
+                <p><strong>Descripción:</strong> Soy un desarrollador apasionado por la inteligencia artificial y las APIs.</p>
+            </div>
+        </div>
+    </div>
