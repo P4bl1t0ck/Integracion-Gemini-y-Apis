@@ -10,6 +10,8 @@ namespace Integracion_Gemini_y_Apis.Repositories
     {
         private  HttpClient _httpClient;
         private string token = "hf_Oculto_Github_No_Me_Deja";
+        //Este token es un ejemplo, debes de sustituirlo por tu token de Hugging Face.
+        //Cambie la token, debido a problemas de seguridad, ya que no me deja subirlo a Github.
         public HuggingRepositorie()
         {
             _httpClient = new HttpClient();
