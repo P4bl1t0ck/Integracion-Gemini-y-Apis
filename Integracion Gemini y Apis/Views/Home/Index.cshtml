@@ -26,12 +26,9 @@
                     <p>Respuesta del chatbot: @ViewBag.chatbotResponse</p>
                     }
                     <!--Boton de guardado de respuestas de Chatbot.-->
-                    <div style="margin-top: 20px;">
-                        <form asp-controller="Home" asp-action="GuardarRespuesta" method="post" style="display:inline-block;">
-                            <input type="hidden" name="frase" value="@ViewBag.chatbotResponse" />
-                            <button type="submit" class="btn btn-success">💾 Guardar respuesta</button>
-                        </form>
-                    </div>
+                    <form asp-controller="Home" asp-action="GuradarChatBot" method="post">
+                        <button type="submit">Guardar Respuesta.</button>
+                    </form>
                 </div>
             </div>
         </div>

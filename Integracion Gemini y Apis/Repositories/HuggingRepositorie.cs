@@ -3,17 +3,20 @@ using Integracion_Gemini_y_Apis.Models;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace Integracion_Gemini_y_Apis.Repositories
 {
     public class HuggingRepositorie : IChatbotServive
     {
         private  HttpClient _httpClient;
-        private string token = "hf_No_Es_Un_Token";
+        private readonly HuggingsReponse_ContextoBaseDeDatos _contexto;
+        private string token = "hf_Not_A_Api_Token";
         //Este token es un ejemplo, debes de sustituirlo por tu token de Hugging Face.
         //Cambie la token, debido a problemas de seguridad, ya que no me deja subirlo a Github.
-        public HuggingRepositorie()
+        public HuggingRepositorie(HuggingsReponse_ContextoBaseDeDatos context)
         {
+            _contexto = context;
             _httpClient = new HttpClient();
             //string token = Environment.GetEnvironmentVariable("HF_TOKEN");//OPENIA_TOKEN
                     
@@ -41,9 +44,17 @@ namespace Integracion_Gemini_y_Apis.Repositories
 
 
 
-        public Task<bool> SaveResponse(string chatbotprompt, string response)
+        public async Task<bool> SaveResponse(string chatbotprompt, string response)
         {
-            throw new NotImplementedException();
+            var entity = new HuggingResponseModel
+            {
+                response = response
+                // Si quieres guardar el prompt, agrega una propiedad en el modelo y asígnala aquí.
+            };
+
+            _contexto.HuggingResponseModel.Add(entity);
+            await _contexto.SaveChangesAsync();
+            return true;
         }
     }
 }

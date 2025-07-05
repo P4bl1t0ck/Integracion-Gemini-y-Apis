@@ -1,4 +1,8 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<HuggingsReponse_ContextoBaseDeDatos>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HuggingsReponse_ContextoBaseDeDatos") ?? throw new InvalidOperationException("Connection string 'HuggingsReponse_ContextoBaseDeDatos' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
